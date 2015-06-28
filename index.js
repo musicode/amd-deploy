@@ -7,7 +7,18 @@ var generateFileCode = require('./lib/generateFileCode');
 
 var util = require('./lib/util');
 
-module.exports = exports = function (path, config) {
+/**
+ *
+ * @param options
+ * @property {string} options.path
+ * @property {string=} options.code 如果没传，会去读取 path 对应的文件内容
+ * @property {Object} options.config
+ * @property {Function} options.callback
+ */
+module.exports = function (options) {
+
+    var config = options.config;
+    var callback = options.callback;
 
     var counter = 0;
 
@@ -38,22 +49,23 @@ module.exports = exports = function (path, config) {
 
         });
 
-        code = code.join('');
+        callback(code.join('\n'));
 
-        //console.log(code)
     };
 
-    var parse = function (path) {
+    var process = function (path, code) {
 
         counter++;
 
-        parseFile(path, config, function (data) {
+        var processCode = function (code) {
 
-            addCombine(data);
+            var fileInfo = parseFile(path, code, config);
 
-            data.combine.forEach(function (moduleId) {
+            addCombine(fileInfo);
+
+            fileInfo.combine.forEach(function (moduleId) {
                 if (!util.hasPlugin(moduleId)) {
-                    parse(
+                    process(
                         moduleIdToFilePath(moduleId, config)
                     );
                 }
@@ -65,17 +77,29 @@ module.exports = exports = function (path, config) {
                 output();
             }
 
-        });
+        };
+
+        if (code) {
+            processCode(code);
+        }
+        else {
+            util.readFile(path, function (code) {
+                processCode(code);
+            });
+        }
 
     };
 
-    parse(path);
+    process(options.path, options.code);
 
 };
 
-exports(
-    '/Users/zhujl/github/www-fe/src/pay/course.js',
-    {
+module.exports({
+    path: '/Users/zhujl/github/www-fe/src/pay/course.js',
+    callback: function (code) {
+        console.log(code);
+    },
+    config: {
         baseUrl: '/Users/zhujl/github/www-fe/src',
         paths: {
             cobble: '../dep/cobble/0.3.19/src/',
@@ -121,5 +145,5 @@ exports(
             }
         ]
     }
-);
+});
 
