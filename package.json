@@ -1,0 +1,26 @@
+{
+  "name": "amd-deploy",
+  "version": "1.0.0",
+  "description": "amd deploy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/musicode/amd-deploy.git"
+  },
+  "author": "musicode",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/musicode/amd-deploy/issues"
+  },
+  "homepage": "https://github.com/musicode/amd-deploy",
+  "devDependencies": {
+    "async": "^1.2.1",
+    "colors": "^1.1.2",
+    "escodegen": "^1.6.1",
+    "esprima": "^2.3.0",
+    "estraverse": "^4.1.0"
+  }
+}
