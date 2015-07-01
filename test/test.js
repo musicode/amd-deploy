@@ -2,9 +2,9 @@
 var amdDeploy = require('../index');
 
 amdDeploy({
-    path: '/Users/zhujl/github/www-fe/src/pay/course.js',
+    path: '/Users/zhujl/github/www-fe/src/pay/pay.js',
     callback: function (code) {
-        console.log(code);
+        //console.log(code);
     },
     config: {
         baseUrl: '/Users/zhujl/github/www-fe/src',
@@ -13,8 +13,21 @@ amdDeploy({
             ab: './common'
         },
         combine: {
-            'ab/service': 1,
-            'pay/course': 1
+            exclude: [
+                'cobble',
+                'cobble/**/*',
+                'echarts',
+                'echarts/**/*',
+                'moment',
+                'underscore',
+                'imageCrop',
+                'audioPlayer',
+                'TextClipboard'
+            ],
+            modules: {
+                'ab/service': 1,
+                'pay/course': 1
+            }
         },
         replace: function (requireId, resourcePath) {
             return requireId;

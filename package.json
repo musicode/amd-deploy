@@ -17,10 +17,10 @@
   },
   "homepage": "https://github.com/musicode/amd-deploy",
   "dependencies": {
-    "async": "^1.2.1",
     "colors": "^1.1.2",
     "escodegen": "^1.6.1",
     "esprima": "^2.3.0",
-    "estraverse": "lib^4.1.0"
+    "estraverse": "lib^4.1.0",
+    "minimatch": "^2.0.8"
   }
 }

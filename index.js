@@ -29,10 +29,12 @@ module.exports = function (options) {
         if (!combineMap[data.path]) {
             combineMap[data.path] = 1;
             combine.push(data);
+            return true;
         }
+        return false;
     };
 
-    var output = function () {
+    var done = function () {
 
         var code = [ ];
         var replace = config.replace;
@@ -61,20 +63,20 @@ module.exports = function (options) {
 
             var fileInfo = parseFile(path, code, config);
 
-            addCombine(fileInfo);
-
-            fileInfo.combine.forEach(function (moduleId) {
-                if (!util.hasPlugin(moduleId)) {
-                    process(
-                        moduleIdToFilePath(moduleId, config)
-                    );
-                }
-            });
+            if (addCombine(fileInfo)) {
+                fileInfo.combine.forEach(function (moduleId) {
+                    if (!util.hasPlugin(moduleId)) {
+                        process(
+                            moduleIdToFilePath(moduleId, config)
+                        );
+                    }
+                });
+            }
 
             counter--;
 
             if (counter === 0) {
-                output();
+                done();
             }
 
         };
@@ -83,9 +85,15 @@ module.exports = function (options) {
             processCode(code);
         }
         else {
-            util.readFile(path, function (code) {
+            code = util.readFile(path);
+            if (typeof code.then === 'function') {
+                code.then(function (code) {
+                    processCode(code);
+                });
+            }
+            else {
                 processCode(code);
-            });
+            }
         }
 
     };
