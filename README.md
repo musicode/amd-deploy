@@ -12,10 +12,28 @@
     baseUrl: '',
     paths: { },
     packages: [ ],
+    replaceResourceId: function (id, absolutePath) {
+        return id;
+    },
+    replaceRequireConfig: function (config) {
+        if (config.baseUrl) {
+            config.baseUrl = config.baseUrl.replace('url', 'asset');
+        }
+        return config;
+    },
     combine: {
-        moduleId: {
-            include: [ ],
-            exclucde: [ ]
+        include: [
+            'json2'
+        ],
+        exclude: [
+            'cobble',
+            'cobble/**/*'
+        ],
+        modules: {
+            moduleId: {
+                include: [ ],
+                exclucde: [ ]
+            }
         }
     }
 }
