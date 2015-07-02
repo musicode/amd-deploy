@@ -9,28 +9,7 @@ amdDeploy({
     config: {
         baseUrl: '/Users/zhujl/github/www-fe/src',
         paths: {
-            cobble: '../dep/cobble/0.3.19/src/',
-            ab: './common'
-        },
-        combine: {
-            exclude: [
-                'cobble',
-                'cobble/**/*',
-                'echarts',
-                'echarts/**/*',
-                'moment',
-                'underscore',
-                'imageCrop',
-                'audioPlayer',
-                'TextClipboard'
-            ],
-            modules: {
-                'ab/service': 1,
-                'pay/course': 1
-            }
-        },
-        replace: function (requireId, resourcePath) {
-            return requireId;
+            cobble: '../dep/cobble/0.3.19/src/'
         },
         packages: [
             {
@@ -63,6 +42,31 @@ amdDeploy({
                 "location": "../dep/TextClipboard/0.0.2/src",
                 "main": "TextClipboard"
             }
-        ]
+        ],
+        combine: {
+            exclude: [
+                'cobble',
+                'cobble/**/*',
+                'echarts',
+                'echarts/**/*',
+                'moment',
+                'underscore',
+                'imageCrop',
+                'audioPlayer',
+                'TextClipboard'
+            ],
+            modules: {
+                'ab/service': 1,
+                'pay/course': 1
+            }
+        },
+        replaceRequireConfig: function (config) {
+            return {
+                baseUrl: '你没啥'
+            };
+        },
+        replaceResourceId: function (resourceId, absolutePath) {
+            return resourceId;
+        },
     }
 });

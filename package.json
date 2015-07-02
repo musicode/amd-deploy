@@ -1,6 +1,6 @@
 {
   "name": "amd-deploy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "amd deploy",
   "main": "index.js",
   "scripts": {

@@ -37,13 +37,10 @@ module.exports = function (options) {
     var done = function () {
 
         var code = [ ];
-        var replace = config.replace;
 
         combine.forEach(function (fileInfo) {
 
-            if (replace) {
-                replaceResource(fileInfo, config, replace);
-            }
+            replaceResource(fileInfo, config);
 
             code.push(
                 generateFileCode(fileInfo)
@@ -55,7 +52,7 @@ module.exports = function (options) {
 
     };
 
-    var process = function (path, code) {
+    var processFile = function (path, code) {
 
         counter++;
 
@@ -66,7 +63,7 @@ module.exports = function (options) {
             if (addCombine(fileInfo)) {
                 fileInfo.combine.forEach(function (moduleId) {
                     if (!util.hasPlugin(moduleId)) {
-                        process(
+                        processFile(
                             moduleIdToFilePath(moduleId, config)
                         );
                     }
@@ -85,7 +82,9 @@ module.exports = function (options) {
             processCode(code);
         }
         else {
+
             code = util.readFile(path);
+
             if (typeof code.then === 'function') {
                 code.then(function (code) {
                     processCode(code);
@@ -94,11 +93,12 @@ module.exports = function (options) {
             else {
                 processCode(code);
             }
+
         }
 
     };
 
-    process(options.path, options.code);
+    processFile(options.path, options.code);
 
 };
 
