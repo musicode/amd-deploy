@@ -1,8 +1,8 @@
 
 var parseFile = require('./lib/parseFile');
 
-var moduleIdToFilePath = require('./lib/moduleIdToFilePath');
-var replaceResource = require('./lib/replaceResource');
+var resourceIdToFilePath = require('./lib/resourceIdToFilePath');
+var replaceResources = require('./lib/replaceResources');
 var generateFileCode = require('./lib/generateFileCode');
 
 var util = require('./lib/util');
@@ -29,7 +29,7 @@ module.exports = function (options) {
         combineCache[options.file].forEach(
             function (fileInfo) {
 
-                replaceResource(fileInfo, config);
+                replaceResources(fileInfo, config);
 
                 code.push(
                     generateFileCode(fileInfo)
@@ -76,7 +76,7 @@ module.exports = function (options) {
                 fileInfo.combine.forEach(
                     function (moduleId) {
                         processFile(
-                            moduleIdToFilePath(moduleId, config)
+                            resourceIdToFilePath(moduleId, config)
                         );
                     }
                 );
