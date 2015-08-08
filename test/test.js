@@ -1,10 +1,11 @@
 
+var path = require('path');
 var amdDeploy = require('../index');
 
 amdDeploy({
-    path: '/Users/zhujl/github/www-fe/src/pay/pay.js',
+    file: '/Users/zhujl/github/www-fe/src/pay/pay.js',
     callback: function (code) {
-        //console.log(code);
+        console.log(code);
     },
     config: {
         baseUrl: '/Users/zhujl/github/www-fe/src',
@@ -65,8 +66,15 @@ amdDeploy({
                 baseUrl: '你没啥'
             };
         },
-        replaceResourceId: function (resourceId, absolutePath) {
-            return resourceId;
+        replaceRequireResource: function (resourceId, absolutePath) {
+
+            var ext = path.extname(resourceId);
+
+            return path.join(
+                path.dirname(resourceId),
+                path.basename(resourceId, ext) + Date.now() + ext
+            );
+
         },
     }
 });

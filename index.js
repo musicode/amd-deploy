@@ -7,11 +7,13 @@ var generateFileCode = require('./lib/generateFileCode');
 
 var util = require('./lib/util');
 
+var combineCache = { };
+
 /**
  *
  * @param options
- * @property {string} options.path
- * @property {string=} options.code 如果没传，会去读取 path 对应的文件内容
+ * @property {string} options.file 文件路径
+ * @property {string=} options.content 如果没传，会去读取 options.file 对应的文件内容
  * @property {Object} options.config
  * @property {Function} options.callback
  */
@@ -19,6 +21,32 @@ module.exports = function (options) {
 
     var config = options.config;
     var callback = options.callback;
+
+    var done = function () {
+
+        var code = [ ];
+
+        combineCache[options.file].forEach(
+            function (fileInfo) {
+
+                replaceResource(fileInfo, config);
+
+                code.push(
+                    generateFileCode(fileInfo)
+                );
+
+            }
+        );
+
+        callback(code.join('\n'));
+
+    };
+
+    if (combineCache[options.file]) {
+        done();
+        return;
+    }
+
 
     var counter = 0;
 
@@ -34,71 +62,56 @@ module.exports = function (options) {
         return false;
     };
 
-    var done = function () {
 
-        var code = [ ];
 
-        combine.forEach(function (fileInfo) {
-
-            replaceResource(fileInfo, config);
-
-            code.push(
-                generateFileCode(fileInfo)
-            );
-
-        });
-
-        callback(code.join('\n'));
-
-    };
-
-    var processFile = function (path, code) {
+    var processFile = function (file, content) {
 
         counter++;
 
-        var processCode = function (code) {
+        var processContent = function (content) {
 
-            var fileInfo = parseFile(path, code, config);
+            var fileInfo = parseFile(file, content, config);
 
             if (addCombine(fileInfo)) {
-                fileInfo.combine.forEach(function (moduleId) {
-                    if (!util.hasPlugin(moduleId)) {
+                fileInfo.combine.forEach(
+                    function (moduleId) {
                         processFile(
                             moduleIdToFilePath(moduleId, config)
                         );
                     }
-                });
+                );
             }
 
             counter--;
 
             if (counter === 0) {
+                combineCache[options.file] = combine;
                 done();
             }
 
         };
 
-        if (code) {
-            processCode(code);
+        if (content) {
+            processContent(content);
         }
         else {
 
-            code = util.readFile(path);
+            content = util.readFile(file);
 
-            if (typeof code.then === 'function') {
-                code.then(function (code) {
-                    processCode(code);
+            if (typeof content.then === 'function') {
+                content.then(function (content) {
+                    processContent(content);
                 });
             }
             else {
-                processCode(code);
+                processContent(content);
             }
 
         }
 
     };
 
-    processFile(options.path, options.code);
+    processFile(options.file, options.content);
 
 };
 

@@ -32,7 +32,7 @@
         modules: {
             moduleId: {
                 include: [ ],
-                exclucde: [ ]
+                exclude: [ ]
             }
         }
     }
