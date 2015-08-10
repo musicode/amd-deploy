@@ -24,21 +24,17 @@ module.exports = function (options) {
 
     var done = function () {
 
-        var code = [ ];
+        var files = combineCache[options.file];
 
-        combineCache[options.file].forEach(
+        files.forEach(
             function (fileInfo) {
-
                 replaceResources(fileInfo, config);
-
-                code.push(
-                    generateFileCode(fileInfo)
-                );
-
             }
         );
 
-        callback(code.join('\n'));
+        callback(
+            generateFileCode(files)
+        );
 
     };
 
