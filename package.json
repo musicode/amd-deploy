@@ -1,6 +1,6 @@
 {
   "name": "amd-deploy",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "amd deploy",
   "main": "index.js",
   "scripts": {
@@ -16,8 +16,7 @@
     "url": "https://github.com/musicode/amd-deploy/issues"
   },
   "homepage": "https://github.com/musicode/amd-deploy",
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
     "escodegen": "^1.6.1",
     "esprima": "^2.5.0",
     "estraverse": "^4.1.0",
