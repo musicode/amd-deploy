@@ -33,7 +33,8 @@ module.exports = function (options) {
         );
 
         callback(
-            generateFileCode(files)
+            generateFileCode(files),
+            options
         );
 
     };
