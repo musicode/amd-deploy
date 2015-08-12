@@ -72,9 +72,12 @@ module.exports = function (options) {
             if (addCombine(fileInfo)) {
                 fileInfo.combine.forEach(
                     function (moduleId) {
-                        processFile(
-                            resourceIdToFilePath(moduleId, config)
-                        );
+
+                        var filePath = resourceIdToFilePath(moduleId, config);
+                        if (filePath) {
+                            processFile(filePath);
+                        }
+
                     }
                 );
             }
