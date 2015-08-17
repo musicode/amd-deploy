@@ -14,6 +14,7 @@ var combineCache = { };
  * @param options
  * @property {string} options.file 文件路径
  * @property {string=} options.content 如果没传，会去读取 options.file 对应的文件内容
+ * @property {boolean=} options.minify 输出是否压缩
  * @property {Object} options.config
  * @property {Function} options.callback
  */
@@ -33,7 +34,7 @@ module.exports = function (options) {
         );
 
         callback(
-            generateFileCode(files),
+            generateFileCode(files, config.minify),
             options
         );
 
