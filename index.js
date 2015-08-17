@@ -71,16 +71,20 @@ module.exports = function (options) {
             var fileInfo = parseFile(file, content, config);
 
             if (addCombine(fileInfo)) {
-                fileInfo.combine.forEach(
-                    function (moduleId) {
+
+                fileInfo.modules.forEach(function (module) {
+
+                    module.combine.forEach(function (moduleId) {
 
                         var filePath = resourceIdToFilePath(moduleId, config);
                         if (filePath) {
                             processFile(filePath);
                         }
 
-                    }
-                );
+                    });
+
+                });
+
             }
 
             counter--;
