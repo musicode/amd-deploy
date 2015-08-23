@@ -2,7 +2,7 @@
 
 ## 功能
 
-* 支持打包合并
+* 支持模块合并，用两级 include/exclude，实现最好的合并规则
 * 支持资源替换，便于缓存控制
 
 ## 配置
@@ -46,11 +46,15 @@
 ```
 {
     combine: {
-        // 全局要合并的模块
+
+        // 全局 include 配置，应用于所有模块
+        // include 表示即使模块不依赖某些模块，也会合并进去，避免需要时发请求
         include: [
-            'json2'
+            'underscore'
         ],
-        // 全局不合并的模块
+
+        // 全局 exclude 配置，应用于所有模块
+        // exclude 表示即使模块依赖某些模块，也不会合并进去，第三方库和业务 common 层通常会用到
         exclude: [
             'cobble',
             'cobble/**/*'
@@ -58,11 +62,21 @@
 
         // 模块默认按自己的依赖进行合并（不合并 build 个毛...）
         // 只有配置成 false 才表示不需要合并（给你不合并的权利）
-        // 每个模块还可以配置 include 和 exclude，优先级比全局 include exclude 更高，即
+
+        // 模块默认继承全局 include 和 exclude
+        // 只有按如下配置才表示不需要继承
+        // {
+        //     moduleId: {
+        //         inheritInclude: false,
+        //         inheritExclude: false
+        //     }
+        // }
+
+        // 每个模块可以单独配置自己的 include 和 exclude，且优先级比全局 include exclude 更高，即
         // 如果 combine.include 包含了一些模块，module.exclude 可以去掉
         // 如果 combine.exclude 排除了一些模块，module.include 可以加上
 
-        // exclude 和 moduleId 支持模糊匹配，规则请参考 glob
+        // exclude 和 moduleId 支持模糊匹配（为了避免误杀，只当 * 存在时开启），规则请参考 glob
         modules: {
             moduleId: {
                 include: [ ],
