@@ -61,6 +61,7 @@ amdDeploy({
                 'pay/course': 1
             }
         },
+        minify: true,
         replaceRequireConfig: function (config) {
             return {
                 baseUrl: '你没啥'
