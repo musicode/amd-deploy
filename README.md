@@ -25,10 +25,10 @@
 ```
 {
     // 资源 ID 替换，如 require('underscore')
-    // raw 表示代码中写的字面量，即 underscore
+    // resource.id 表示代码中写的字面量，即 underscore
     // absolute 表示硬盘中的文件路径，如 project/dep/underscore/1.0.0/src/underscore.js
-    replaceRequireResource: function (raw, absolute) {
-        return raw + Date.now();
+    replaceRequireResource: function (resource, absolute) {
+        return resource.id + Date.now();
     },
 
     // 替换 require.config 中的一些值，比如 src 转为 asset
