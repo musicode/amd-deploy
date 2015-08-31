@@ -1,4 +1,6 @@
 
+var path = require('path');
+
 var parseFile = require('./lib/parseFile');
 
 var resourceIdToFilePath = require('./lib/resourceIdToFilePath');
@@ -60,6 +62,7 @@ module.exports = function (options) {
     };
 
 
+    var fileReader = config.fileReader || { };
 
     var processFile = function (file, content) {
 
@@ -73,9 +76,9 @@ module.exports = function (options) {
 
                 fileInfo.modules.forEach(function (module) {
 
-                    module.combine.forEach(function (moduleId) {
+                    module.combine.forEach(function (resourceId) {
 
-                        var filePath = resourceIdToFilePath(moduleId, config);
+                        var filePath = resourceIdToFilePath(resourceId, config);
                         if (filePath) {
                             processFile(filePath);
                         }
@@ -100,14 +103,21 @@ module.exports = function (options) {
         }
         else {
 
-            content = util.readFile(file);
+            var extname = path.extname(file).toLowerCase();
+
+            var readFile = fileReader[ extname.substr(1) ];
+            if (!readFile) {
+                readFile = util.readFile;
+            }
+
+            content = readFile(file);
 
             if (typeof content.then === 'function') {
                 content.then(function (content) {
                     processContent(content);
                 });
             }
-            else {
+            else if (typeof content === 'string') {
                 processContent(content);
             }
 

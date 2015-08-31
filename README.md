@@ -87,6 +87,25 @@
 }
 ```
 
+## 合并插件资源
+
+如果需要合并样式或模板，可自己写规则，如下
+
+```
+{
+    fileReader: {
+
+        styl: function (filePath) {
+
+            return 'define("id", [], function () {'
+                 +     'return style;'
+                 + '})';
+        }
+
+    }
+}
+```
+
 ## 压缩成一行
 
 语法树生成代码，默认会被格式化，如果输入的代码已经过 uglify 处理，可用 minify 参数保持压缩状态
