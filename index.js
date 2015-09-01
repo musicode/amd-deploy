@@ -61,6 +61,17 @@ module.exports = function (options) {
         return false;
     };
 
+    var processFileComplete = function () {
+
+        counter--;
+
+        if (counter === 0) {
+            combineCache[options.file] = combine;
+            done();
+        }
+
+    };
+
 
     var fileReader = config.fileReader || { };
 
@@ -89,12 +100,7 @@ module.exports = function (options) {
 
             }
 
-            counter--;
-
-            if (counter === 0) {
-                combineCache[options.file] = combine;
-                done();
-            }
+            processFileComplete();
 
         };
 
@@ -112,14 +118,18 @@ module.exports = function (options) {
 
             content = readFile(file);
 
-            if (typeof content.then === 'function') {
-                content.then(function (content) {
-                    processContent(content);
-                });
+            if (content) {
+                if (typeof content.then === 'function') {
+                    return content.then(function (content) {
+                        processContent(content);
+                    });
+                }
+                else if (typeof content === 'string') {
+                    return processContent(content);
+                }
             }
-            else if (typeof content === 'string') {
-                processContent(content);
-            }
+
+            processFileComplete();
 
         }
 
