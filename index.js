@@ -100,7 +100,7 @@ module.exports = function (options) {
 
             }
 
-            processFileComplete();
+            processFileComplete(file);
 
         };
 
@@ -129,7 +129,7 @@ module.exports = function (options) {
                 }
             }
 
-            processFileComplete();
+            processFileComplete(file);
 
         }
 
