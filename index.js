@@ -6,6 +6,7 @@ var parseFile = require('./lib/parseFile');
 var resourceIdToFilePath = require('./lib/resourceIdToFilePath');
 var replaceResources = require('./lib/replaceResources');
 var generateFileCode = require('./lib/generateFileCode');
+var getFileDependencies = require('./lib/getFileDependencies');
 
 var util = require('./lib/util');
 
@@ -28,6 +29,15 @@ module.exports = function (options) {
 
         var files = combineCache[options.file];
 
+        // 按依赖从少到多排序
+        files.sort(
+            function (fileInfo1, fileInfo2) {
+                return getFileDependencies(fileInfo1, combineCache, config).length
+                    - getFileDependencies(fileInfo2, combineCache, config).length;
+            }
+        );
+
+        // 替换依赖引用路径
         files.forEach(
             function (fileInfo) {
                 replaceResources(fileInfo, config);
